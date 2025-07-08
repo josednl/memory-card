@@ -1,0 +1,6 @@
+.menu-buttons-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    list-style: none;
+}
