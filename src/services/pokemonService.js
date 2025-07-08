@@ -33,3 +33,15 @@ export const getPokemonDetails = async (identifier) => {
         throw error;
     }
 };
+
+// const [pokemonList, setPokemonList] = useState([]);
+// const [selected, setSelected] = useState(null);
+
+// useEffect(() => {
+// 	getPokemonList(10).then(data => setPokemonList(data.results));
+// }, []);
+
+// const handleClick = async (name) => {
+// 	const details = await getPokemonDetails(name);
+// 	setSelected(details);
+// };

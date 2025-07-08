@@ -1,0 +1,26 @@
+.game-panel {
+	display: grid;
+	align-items: center;
+	grid-template-columns: 1fr 5fr 1fr;
+	padding: 15px;
+}
+
+.game-panel button {
+	justify-self: start;
+}
+
+.game-scoreboard {
+	grid-column: 2 / 3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	font-size: 30px;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+.game-difficulty {
+	grid-column: 3 / 4;
+	font-size: 20px;
+}
