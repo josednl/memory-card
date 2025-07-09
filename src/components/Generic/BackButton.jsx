@@ -1,6 +1,6 @@
 import Button from '@/components/Generic/Button.jsx';
 import LeftArrowIcon from '@/assets/chevron-left.svg';
-import { useNavigation } from '@/components/Context/NavigationContext.jsx';
+import { useNavigation } from '@/components/context/NavigationContext.jsx';
 
 export default function BackButton({ className = '' }) {
 	const { goBack } = useNavigation();

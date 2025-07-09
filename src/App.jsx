@@ -1,7 +1,7 @@
 import './App.css';
 import { useState } from 'react';
 import MainMenu from '@/components/Menu/MainMenu.jsx';
-import { NavigationContext } from '@/components/Context/NavigationContext.jsx';
+import { NavigationContext } from '@/components/context/NavigationContext.jsx';
 
 function App() {
 	const [activeComponent, setActiveComponent] = useState(null);

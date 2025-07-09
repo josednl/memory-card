@@ -8,7 +8,7 @@ const API_URL = 'https://pokeapi.co/api/v2/';
 export const getPokemonList = async (limit = 10, offset = 0) => {
     try {
         const response = await fetch(`${API_URL}/pokemon?limit=${limit}&offset=${offset}`);
-        if (!response.ok) throw new Error('Error gettiing Pokémon list');
+        if (!response.ok) throw new Error('Error getting Pokémon list');
         const data = await response.json();
         return data;
     } catch (error) {
@@ -34,12 +34,24 @@ export const getPokemonDetails = async (identifier) => {
     }
 };
 
-// const [pokemonList, setPokemonList] = useState([]);
-// const [selected, setSelected] = useState(null);
+export const getDetailedPokemonList = async (limit = 10, offset = 0) => {
+    try {
+        const list = await getPokemonList(limit, offset);
 
-// useEffect(() => {
-// 	getPokemonList(10).then(data => setPokemonList(data.results));
-// }, []);
+        const detailPromises = list.results.map(pokemon =>
+            getPokemonDetails(pokemon.name)
+        );
+
+        const detailedPokemons = await Promise.all(detailPromises);
+
+        return detailedPokemons;
+    } catch (error) {
+        console.error('Error fetching detailed Pokémon list:', error);
+        throw error;
+    }
+};
+
+// const [selected, setSelected] = useState(null);
 
 // const handleClick = async (name) => {
 // 	const details = await getPokemonDetails(name);
