@@ -1,4 +1,12 @@
+.game-container {
+	display: grid;
+	grid-template-rows: 1fr 9fr;
+	min-height: 100vh;
+}
+
 .game-panel {
+	grid-row: 1 / 2;
+	align-self: flex-start;
 	display: grid;
 	align-items: center;
 	grid-template-columns: 1fr 5fr 1fr;
@@ -23,4 +31,15 @@
 .game-difficulty {
 	grid-column: 3 / 4;
 	font-size: 20px;
+}
+
+.game-board {
+	grid-row: 2 / 3;
+	align-self: flex-start;
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	margin-top: 30px;
 }

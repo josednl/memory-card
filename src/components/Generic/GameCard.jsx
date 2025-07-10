@@ -1,7 +1,7 @@
 import '@/styles/GameCards.css';
 import QuestionMarkIcon from '@/assets/question_mark.svg';
 
-export default function GameCard({ id, front, flipped, onClick, disabled}) {
+export default function GameCard({ id, front, flipped, onClick, disabled }) {
 	return (
 		<>
 			<div

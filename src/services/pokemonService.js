@@ -51,9 +51,23 @@ export const getDetailedPokemonList = async (limit = 10, offset = 0) => {
     }
 };
 
-// const [selected, setSelected] = useState(null);
+export const getRandomPokemonList = async (count = 10, maxPokemonId = 898) => {
+    try {
+        const uniqueRandomIds = new Set();
+        while (uniqueRandomIds.size < count) {
+            const randomId = Math.floor(Math.random() * maxPokemonId) + 1;
+            uniqueRandomIds.add(randomId);
+        }
 
-// const handleClick = async (name) => {
-// 	const details = await getPokemonDetails(name);
-// 	setSelected(details);
-// };
+        const detailPromises = Array.from(uniqueRandomIds).map(id =>
+            getPokemonDetails(id)
+        );
+
+        const detailedPokemons = await Promise.all(detailPromises);
+
+        return detailedPokemons;
+    } catch (error) {
+        console.error('Error fetching random Pokémon list:', error);
+        throw error;
+    }
+};
