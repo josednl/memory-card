@@ -1,0 +1,39 @@
+.selector-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 5px 15px;
+    margin-bottom: 16px;
+    background-color: rgb(27, 27, 27);
+    width: 100%;
+    max-width: 800px;
+    color: #ffffff;
+}
+
+.selector-label {
+    min-width: 100px;
+    font-weight: bold;
+    text-align: start;
+}
+
+.selector {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.selector-option {
+    min-width: 80px;
+    text-align: center;
+}
+
+.selector-button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.selector-button img {
+    width: 30px;
+}

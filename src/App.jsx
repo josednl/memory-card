@@ -2,24 +2,38 @@ import './App.css';
 import { useState } from 'react';
 import MainMenu from '@/components/Menu/MainMenu.jsx';
 import { NavigationContext } from '@/components/context/NavigationContext.jsx';
+import GameBoard from '@/components/Gameplay/GameBoard.jsx';
+import Settings from './components/GameOptions/Settings';
 
 function App() {
-	const [activeComponent, setActiveComponent] = useState(null);
-	const goBack = () => setActiveComponent(null);
+	const [screen, setScreen] = useState('menu');
+	const [config, setConfig] = useState({
+		difficulty: 'Medium',
+		mode: 'Normal',
+	});
+
+	const goBack = () => setScreen('menu');
+
+	const renderContent = () => {
+		switch(screen) {
+			case 'game':
+				return <GameBoard config={config} />
+			case 'settings':
+				return <Settings initialConfig={config} onSave={(newConfig) => {
+					setConfig(newConfig);
+					setScreen('menu');
+				}} />
+			default:
+				return <MainMenu onSelect={setScreen} />
+		}
+	}
 
 	return (
 		<>
 			<NavigationContext.Provider value={{ goBack }}>
-				{activeComponent ? (
-					<div className='content'>
-						{activeComponent}
-					</div>
-				) : (
-					<div className='menu'>
-						<h1 className='main-title multicolor-text'>Memory Card Game</h1>
-						<MainMenu onSelect={setActiveComponent} />
-					</div>
-				)}
+				<div className='content'>
+					{renderContent()}
+				</div>
 			</NavigationContext.Provider>
 		</>
 	);

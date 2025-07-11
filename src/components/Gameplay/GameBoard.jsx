@@ -5,7 +5,7 @@ import { shuffleArray } from '@/utils/shuffleArray.js';
 import BackButton from '@/components/Generic/BackButton.jsx';
 import GameCard from '@/components/Generic/GameCard.jsx';
 
-export default function GameBoard() {
+export default function GameBoard({ config }) {
 	const [cards, setCards] = useState([]);
 	const [flipped, setFlipped] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
@@ -15,6 +15,7 @@ export default function GameBoard() {
 		const savedBest = localStorage.getItem('bestScore');
 		return savedBest ? parseInt(savedBest, 10) : 0;
 	});
+	console.log(config);
 
    useEffect(() => {
 		let isMounted = true;
@@ -26,7 +27,7 @@ export default function GameBoard() {
 				setCards(data);
 			}
 			} catch (error) {
-			console.error('Error fetching Pokémon:', error);
+				console.error('Error fetching Pokémon:', error);
 			}
 		};
 
@@ -89,7 +90,7 @@ export default function GameBoard() {
 	return (
 		<>
 			<div className='game-container'>
-				<div className='game-panel'>
+				<div className='panel'>
 					<BackButton />
 					<div className='game-scoreboard'>
 						<div className='current-score'>Current Score: {currentScore}</div> |

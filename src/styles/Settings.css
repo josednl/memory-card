@@ -1,0 +1,17 @@
+.form-settings {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.save-config-button {
+    margin-top: 2rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -33,3 +33,17 @@
 	-webkit-text-fill-color: transparent;
 	font-weight: bold;
 }
+
+.panel {
+	grid-row: 1 / 2;
+	align-self: flex-start;
+	display: grid;
+	align-items: center;
+	grid-template-columns: 1fr 5fr 1fr;
+	padding: 15px;
+	margin-bottom: 30px;
+}
+
+.panel button {
+	justify-self: start;
+}
