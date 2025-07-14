@@ -23,9 +23,22 @@
 .game-board {
 	grid-row: 2 / 3;
 	align-self: flex-start;
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
 	gap: 1rem;
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
+}
+
+.hard {
+	color: #ed7e77;
+}
+
+.medium {
+	color: #ccc84b;
+}
+
+.easy {
+	color: #82cc7e;
 }

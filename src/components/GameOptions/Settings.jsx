@@ -31,7 +31,7 @@ export default function Settings({ initialConfig, onSave }) {
 
 						<Selector
 							label='Mode'
-							options={['Normal', 'Infinite']}
+							options={['Normal', 'Infinity']}
 							value={mode}
 							onChange={setMode}
 						/>

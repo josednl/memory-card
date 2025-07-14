@@ -1,5 +1,5 @@
 import '@/styles/GameBoard.css';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { getRandomPokemonList } from '../../services/pokemonService.js';
 import { shuffleArray } from '@/utils/shuffleArray.js';
 import BackButton from '@/components/Generic/BackButton.jsx';
@@ -10,44 +10,60 @@ export default function GameBoard({ config }) {
 	const [flipped, setFlipped] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
 	const [clickedIds, setClickedIds] = useState(new Set());
+	const [previousCards, setPreviousCards] = useState([]);
 	const [currentScore, setCurrentScore] = useState(0);
 	const [bestScore, setBestScore] = useState(() => {
 		const savedBest = localStorage.getItem('bestScore');
 		return savedBest ? parseInt(savedBest, 10) : 0;
 	});
-	console.log(config);
 
-   useEffect(() => {
-		let isMounted = true;
+	const getCardCount = () => {
+		switch (config.difficulty) {
+			case 'Easy': return 10;
+			case 'Medium': return 20;
+			case 'Hard': return 30;
+			default: return 10;
+		}
+	};
 
-		const fetchCards = async () => {
-			try {
-			const data = await getRandomPokemonList(10);
-			if (isMounted) {
-				setCards(data);
-			}
-			} catch (error) {
-				console.error('Error fetching Pokémon:', error);
-			}
-		};
+	const loadInitialCards = async () => {
+		try {
+			const num = getCardCount();
+			const data = await getRandomPokemonList(num);
+			setCards(data);
+			setPreviousCards(data);
+		} catch (err) {
+			console.error('Error loading initial Pokémon:', err);
+		}
+	};
 
-		fetchCards();
+	const loadNextCardsInfinityMode = async () => {
+		try {
+			const num = getCardCount();
+			const half = Math.floor(num / 2);
+			const oldHalf = shuffleArray(previousCards).slice(0, half);
+			const newHalf = await getRandomPokemonList(num - half);
+			const combined = shuffleArray([...oldHalf, ...newHalf]);
 
-		return () => {
-			isMounted = false;
-		};
+			setCards(combined);
+			setPreviousCards(combined);
+		} catch (err) {
+			console.error('Error loading next Pokémon:', err);
+		}
+	};
 
+	useEffect(() => {
+		loadInitialCards();
 	}, []);
 
-	const handleCardClick = useCallback((id) => {
+
+	const handleCardClick = async (id) => {
 		if (isAnimating) return;
 
-		const wasAlreadyClicked = clickedIds.has(id);
-
-		if (wasAlreadyClicked) {
+		if (clickedIds.has(id)) {
 			alert('You lost');
 			setTimeout(() => {
-				setCards(prev => shuffleArray(prev));
+				setCards((prev) => shuffleArray(prev));
 			}, 500);
 			setCurrentScore(0);
 			setClickedIds(new Set());
@@ -57,24 +73,27 @@ export default function GameBoard({ config }) {
 		setIsAnimating(true);
 		setFlipped(true);
 
-		setTimeout(() => {
+		setTimeout(async () => {
 			setCards(prev => shuffleArray(prev));
-			setTimeout(() => {
+			if (config.mode === 'Infinity') {
+				await loadNextCardsInfinityMode();
+			}
+			
+			setTimeout(async () => {
 				setFlipped(false);
 				setIsAnimating(false);
-
-				setClickedIds(prev => {
+				setClickedIds((prev) => {
 					const updated = new Set(prev);
 					updated.add(id);
 
-					if (updated.size === cards.length) {
+					if (updated.size === cards.length && config.mode !== 'Infinity') {
 						alert('You Win');
 					}
 
 					return updated;
 				});
 
-				setCurrentScore(prev => {
+				setCurrentScore((prev) => {
 					const newScore = prev + 1;
 					if (newScore > bestScore) {
 						setBestScore(newScore);
@@ -84,8 +103,7 @@ export default function GameBoard({ config }) {
 				});
 			}, 500);
 		}, 500);
-	}, [isAnimating, cards.length, bestScore, clickedIds]);
-
+	};
 
 	return (
 		<>
@@ -96,10 +114,10 @@ export default function GameBoard({ config }) {
 						<div className='current-score'>Current Score: {currentScore}</div> |
 						<div className='best-score'>Best Score: {bestScore}</div>
 					</div>
-					<div className='game-difficulty'>Difficulty:</div>
+					<div className='game-difficulty'>Difficulty: <span className={`${(config.difficulty).toLowerCase()}`}>{config.difficulty}</span></div>
 				</div>
 				<div className='game-board'>
-					{cards.map((card) => (
+					{cards.map((card) => ( 
 						<GameCard
 							key={card.id}
 							id={card.id}
