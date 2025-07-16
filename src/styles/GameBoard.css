@@ -4,7 +4,13 @@
 	min-height: 100vh;
 }
 
-.game-scoreboard {
+.game-left {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.game-mid {
 	grid-column: 2 / 3;
 	display: flex;
 	justify-content: center;
@@ -15,7 +21,7 @@
 	text-transform: capitalize;
 }
 
-.game-difficulty {
+.game-right {
 	grid-column: 3 / 4;
 	font-size: 20px;
 }

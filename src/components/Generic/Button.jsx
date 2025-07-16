@@ -7,7 +7,7 @@ export default function Button({
 	text,
 	title = '',
 	icon = '',
-	iconStyles = '',
+	iconStyles = {},
 	iconAlt = '',
 }) {
 	return (

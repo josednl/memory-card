@@ -25,7 +25,8 @@
 	font-size: 50px;
 }
 
-.game-back-button {
+.game-back-button,
+.game-help-button {
     font-size: 10px;
     display: flex;
     justify-content: center;
@@ -34,6 +35,11 @@
 }
 
 .game-back-button img {
+    width: 20px;
+    height: 20px;
+}
+
+.game-help-button img {
     width: 20px;
     height: 20px;
 }

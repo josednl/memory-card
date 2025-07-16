@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react';
 import { getRandomPokemonList } from '../../services/pokemonService.js';
 import { shuffleArray } from '@/utils/shuffleArray.js';
 import BackButton from '@/components/Generic/BackButton.jsx';
+import HelpButton from '@/components/Generic/HelpButton.jsx';
 import GameCard from '@/components/Generic/GameCard.jsx';
 
 export default function GameBoard({ config }) {
 	const [cards, setCards] = useState([]);
 	const [flipped, setFlipped] = useState(false);
-    const [isAnimating, setIsAnimating] = useState(false);
+	const [isAnimating, setIsAnimating] = useState(false);
 	const [clickedIds, setClickedIds] = useState(new Set());
 	const [previousCards, setPreviousCards] = useState([]);
 	const [currentScore, setCurrentScore] = useState(0);
@@ -19,10 +20,14 @@ export default function GameBoard({ config }) {
 
 	const getCardCount = () => {
 		switch (config.difficulty) {
-			case 'Easy': return 10;
-			case 'Medium': return 20;
-			case 'Hard': return 30;
-			default: return 10;
+			case 'Easy':
+				return 10;
+			case 'Medium':
+				return 20;
+			case 'Hard':
+				return 30;
+			default:
+				return 10;
 		}
 	};
 
@@ -54,8 +59,8 @@ export default function GameBoard({ config }) {
 
 	useEffect(() => {
 		loadInitialCards();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
 
 	const handleCardClick = async (id) => {
 		if (isAnimating) return;
@@ -74,11 +79,11 @@ export default function GameBoard({ config }) {
 		setFlipped(true);
 
 		setTimeout(async () => {
-			setCards(prev => shuffleArray(prev));
+			setCards((prev) => shuffleArray(prev));
 			if (config.mode === 'Infinity') {
 				await loadNextCardsInfinityMode();
 			}
-			
+
 			setTimeout(async () => {
 				setFlipped(false);
 				setIsAnimating(false);
@@ -86,7 +91,10 @@ export default function GameBoard({ config }) {
 					const updated = new Set(prev);
 					updated.add(id);
 
-					if (updated.size === cards.length && config.mode !== 'Infinity') {
+					if (
+						updated.size === cards.length &&
+						config.mode !== 'Infinity'
+					) {
 						alert('You Win');
 					}
 
@@ -109,26 +117,40 @@ export default function GameBoard({ config }) {
 		<>
 			<div className='game-container'>
 				<div className='panel'>
-					<BackButton />
-					<div className='game-scoreboard'>
-						<div className='current-score'>Current Score: {currentScore}</div> |
-						<div className='best-score'>Best Score: {bestScore}</div>
+					<div className='game-left'>
+						<BackButton />
+						<HelpButton />
 					</div>
-					<div className='game-difficulty'>Difficulty: <span className={`${(config.difficulty).toLowerCase()}`}>{config.difficulty}</span></div>
+					<div className='game-mid'>
+						<div className='current-score'>
+							Current Score: {currentScore}
+						</div>{' '}
+						|
+						<div className='best-score'>
+							Best Score: {bestScore}
+						</div>
+					</div>
+					<div className='game-right'>
+						Difficulty:{' '}
+						<span className={`${config.difficulty.toLowerCase()}`}>
+							{config.difficulty}
+						</span>
+					</div>
 				</div>
 				<div className='game-board'>
-					{cards.map((card) => ( 
+					{cards.map((card) => (
 						<GameCard
 							key={card.id}
 							id={card.id}
-							front={card.sprites.front_default}
+							title={card.name}
+							image={card.sprites.front_default}
 							flipped={flipped}
 							onClick={() => handleCardClick(card.id)}
 							disabled={isAnimating}
 						/>
 					))}
 				</div>
-			</div>	
+			</div>
 		</>
 	);
 }

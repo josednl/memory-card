@@ -1,7 +1,7 @@
 import '@/styles/GameCards.css';
 import QuestionMarkIcon from '@/assets/question_mark.svg';
 
-export default function GameCard({ id, front, flipped, onClick, disabled }) {
+export default function GameCard({ id, image, title, flipped, onClick, disabled }) {
 	return (
 		<>
 			<div
@@ -10,7 +10,12 @@ export default function GameCard({ id, front, flipped, onClick, disabled }) {
 			>
 				<div className='card-inner'>
 					<div className='card-front'>
-						<img src={front} alt={`Pokemon ${id}`} />
+						<div className='card-image'>
+							<img src={image} alt={`Pokemon ${id}`}/>	
+						</div>
+						<div className='card-footer'>
+							<div className='card-title' title={title}>{title}</div>
+						</div>
 					</div>
 					<div className='card-back'>
 						<img
