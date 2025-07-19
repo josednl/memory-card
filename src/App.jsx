@@ -10,6 +10,7 @@ function App() {
 	const [config, setConfig] = useState({
 		difficulty: 'Medium',
 		mode: 'Normal',
+		theme: 'Pokémon',
 	});
 
 	const goBack = () => setScreen('menu');

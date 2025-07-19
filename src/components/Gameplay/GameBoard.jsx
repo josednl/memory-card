@@ -1,6 +1,7 @@
 import '@/styles/GameBoard.css';
 import { useState, useEffect } from 'react';
-import { getRandomPokemonList } from '../../services/pokemonService.js';
+import { getRandomPokemonList } from '@/services/pokemonService.js';
+import { getRandomAnimes, getRandomMangas, getRandomMixedCharacters } from '@/services/animeService.js';
 import { shuffleArray } from '@/utils/shuffleArray.js';
 import BackButton from '@/components/Generic/BackButton.jsx';
 import HelpButton from '@/components/Generic/HelpButton.jsx';
@@ -13,6 +14,7 @@ export default function GameBoard({ config }) {
 	const [clickedIds, setClickedIds] = useState(new Set());
 	const [previousCards, setPreviousCards] = useState([]);
 	const [currentScore, setCurrentScore] = useState(0);
+	const [loading, setLoading] = useState(true);
 	const [bestScore, setBestScore] = useState(() => {
 		const savedBest = localStorage.getItem('bestScore');
 		return savedBest ? parseInt(savedBest, 10) : 0;
@@ -31,29 +33,55 @@ export default function GameBoard({ config }) {
 		}
 	};
 
+	const loadCardsByTheme = async (count) => {
+		console.log(`Loading cards for theme: ${config.theme}, count: ${count}`);
+		try {
+			switch (config.theme) {
+				case 'Anime':
+					return await getRandomAnimes(count);
+				case 'Manga':
+					return await getRandomMangas(count);
+				case 'Anime & Manga Characters':
+					return await getRandomMixedCharacters(count);
+				case 'Pokémon':
+				default:
+					return await getRandomPokemonList(count);
+			}
+		} catch (error) {
+			console.error(`Error loading cards for theme ${config.theme}:`, error);
+			return await getRandomPokemonList(count);
+		}
+	};
+
 	const loadInitialCards = async () => {
+		setLoading(true);
 		try {
 			const num = getCardCount();
-			const data = await getRandomPokemonList(num);
+			const data = await loadCardsByTheme(num);
 			setCards(data);
 			setPreviousCards(data);
 		} catch (err) {
-			console.error('Error loading initial Pokémon:', err);
+			console.error('Error loading initial cards:', err);
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	const loadNextCardsInfinityMode = async () => {
+		setLoading(true);
 		try {
 			const num = getCardCount();
 			const half = Math.floor(num / 2);
 			const oldHalf = shuffleArray(previousCards).slice(0, half);
-			const newHalf = await getRandomPokemonList(num - half);
+			const newHalf = await loadCardsByTheme(num - half);
 			const combined = shuffleArray([...oldHalf, ...newHalf]);
 
 			setCards(combined);
 			setPreviousCards(combined);
 		} catch (err) {
 			console.error('Error loading next Pokémon:', err);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -138,17 +166,24 @@ export default function GameBoard({ config }) {
 					</div>
 				</div>
 				<div className='game-board'>
-					{cards.map((card) => (
-						<GameCard
-							key={card.id}
-							id={card.id}
-							title={card.name}
-							image={card.sprites.front_default}
-							flipped={flipped}
-							onClick={() => handleCardClick(card.id)}
-							disabled={isAnimating}
-						/>
-					))}
+					{loading ? (
+						<div className='loader-container'>
+							<div className='loader'></div>
+						</div>
+					) : (
+						cards.map((card) => (
+							<GameCard
+								key={card.id}
+								id={card.id}
+								title={card.name}
+								image={card?.sprites?.front_default ?? card?.imageUrl}
+								flipped={flipped}
+								onClick={() => handleCardClick(card.id)}
+								disabled={isAnimating}
+							/>
+						))
+					)}
+					
 				</div>
 			</div>
 		</>

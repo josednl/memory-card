@@ -11,7 +11,7 @@ export default function GameCard({ id, image, title, flipped, onClick, disabled 
 				<div className='card-inner'>
 					<div className='card-front'>
 						<div className='card-image'>
-							<img src={image} alt={`Pokemon ${id}`}/>	
+							<img src={image} alt={`${title, id}`}/>	
 						</div>
 						<div className='card-footer'>
 							<div className='card-title' title={title}>{title}</div>

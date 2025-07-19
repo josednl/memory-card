@@ -6,9 +6,10 @@ import Selector from '@/components/Generic/Selector.jsx';
 export default function Settings({ initialConfig, onSave }) {
 	const [difficulty, setDifficulty] = useState(initialConfig.difficulty);
 	const [mode, setMode] = useState(initialConfig.mode);
+	const [theme, setTheme] = useState(initialConfig.theme || 'Pokémon');
 
 	const handleSave = () => {
-		onSave({ difficulty, mode });
+		onSave({ difficulty, mode, theme });
 	};
 
 	return (
@@ -34,6 +35,13 @@ export default function Settings({ initialConfig, onSave }) {
 							options={['Normal', 'Infinity']}
 							value={mode}
 							onChange={setMode}
+						/>
+
+						<Selector 
+							label='Game theme'
+							options={['Pokémon', 'Anime', 'Manga', 'Anime & Manga Characters']}
+							value={theme}
+							onChange={setTheme}
 						/>
 
 						<button
