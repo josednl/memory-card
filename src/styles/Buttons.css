@@ -37,7 +37,25 @@
 
 .game-back-button img,
 .game-help-button img,
-.game-restart-button img {
+.game-restart-button img,
+.music-toggle-button img {
     width: 20px;
     height: 20px;
+}
+
+.music-toggle-container {
+	position: fixed;
+	top: 15px;
+	right: 15px;
+	z-index: 9999;
+}
+
+.music-toggle-button {
+	padding: 10px;
+	background-color: #1a1a1a;
+	border: 3px solid white;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

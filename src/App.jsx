@@ -1,9 +1,12 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import MainMenu from '@/components/Menu/MainMenu.jsx';
 import { NavigationContext } from '@/components/context/NavigationContext.jsx';
 import GameBoard from '@/components/Gameplay/GameBoard.jsx';
 import Settings from './components/GameOptions/Settings';
+import MusicToggleButton from '@/components/Generic/MusicToggleButton.jsx';
+import { MusicContext } from '@/components/context/MusicContext.jsx';
+import MusicPlayer from '@/components/Generic/MusicPlayer.jsx';
 
 function App() {
 	const [screen, setScreen] = useState('menu');
@@ -11,7 +14,10 @@ function App() {
 		difficulty: 'Medium',
 		mode: 'Normal',
 		theme: 'Pokémon',
+		music: 'Off',
 	});
+
+	const { isPlaying } = useContext(MusicContext);
 
 	const goBack = () => setScreen('menu');
 
@@ -32,6 +38,8 @@ function App() {
 	return (
 		<>
 			<NavigationContext.Provider value={{ goBack }}>
+				<MusicToggleButton />
+				<MusicPlayer music={config.music} isPlaying={isPlaying} />
 				<div className='content'>
 					{renderContent()}
 				</div>

@@ -18,7 +18,9 @@ export default function MainMenu({ onSelect }) {
 
 	return (
 		<div className='menu'>
-			<h1 className='main-title multicolor-text'>Memory Card Game</h1>
+			<div className='main-title-container'>
+				<h1 className='main-title multicolor-text'>Memory Card Game</h1>
+			</div>
 			<nav>
 				<ul className='menu-buttons-box'>
 					{navOptions.map((option) => (

@@ -7,9 +7,10 @@ export default function Settings({ initialConfig, onSave }) {
 	const [difficulty, setDifficulty] = useState(initialConfig.difficulty);
 	const [mode, setMode] = useState(initialConfig.mode);
 	const [theme, setTheme] = useState(initialConfig.theme || 'Pokémon');
+	const [music, setMusic] = useState(initialConfig.music || 'Off');
 
 	const handleSave = () => {
-		onSave({ difficulty, mode, theme });
+		onSave({ difficulty, mode, theme, music });
 	};
 
 	return (
@@ -42,6 +43,13 @@ export default function Settings({ initialConfig, onSave }) {
 							options={['Pokémon', 'Anime', 'Manga', 'Anime & Manga Characters']}
 							value={theme}
 							onChange={setTheme}
+						/>
+
+						<Selector 
+							label='Music'
+							options={['Off', 'Music 1', 'Music 2', 'Music 3']}
+							value={music}
+							onChange={setMusic}
 						/>
 
 						<button
