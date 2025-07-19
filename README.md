@@ -1,12 +1,71 @@
-# React + Vite
+# Memory Card Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+A memory game that challenges players to select cards without repeating them based on customizable themes, difficulty levels, and game modes. It includes a settings panel and a background music player with a toggle function
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Customizable Gameplay**: Choose from various difficulties (`Easy`, `Medium`, `Hard`), game modes (`Normal`, `Infinity`), and card themes (`Pokémon`, `Anime`, etc.).
+- **Music Player**: Select background music and toggle it on or off at any time.
+- **Responsive Design**: Optimized for desktop and mobile experiences.
+
+---
+
+## Technologies Used
+
+- React
+- Vite
+- JavaScript (ES6+)
+- CSS (custom styles + responsive layout)
+- Context API (for global state management)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en)
+- [npm](https://docs.npmjs.com/)
+
+---
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/josednl/memory-card.git
+cd memory-card
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Start development server
+
+```bash
+npm run dev
+```
+
+4. Open your browser
+
+Navigate to `http://localhost:5173` to view the application
+
+---
+
+### Building for Production
+
+```bash
+npm run build
+```
+
+## Live Demo
+
+[View the live demo here](https://memorycard-by-josednl.netlify.app/) or copy and paste this link: `https://memorycard-by-josednl.netlify.app/`
