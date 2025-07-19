@@ -246,3 +246,49 @@ export async function getRandomMixedCharacters(count = 20) {
 
 	return shuffleArray(validCharacters).slice(0, count).map(toCardFormat);
 }
+
+export async function getRandomMixedAnimes(count = 20) {
+	const totalPages = 500;
+	const randomPage = Math.floor(Math.random() * (totalPages - 2)) + 2;
+
+	try {
+		const [popular, random] = await Promise.all([
+			fetchPage('anime', 1),
+			fetchPage('anime', randomPage),
+		]);
+
+		const combined = [...popular, ...random];
+		const filtered = combined.filter(isContentSafe);
+
+		const unique = removeDuplicatesById(filtered);
+		const shuffled = shuffleArray(unique);
+
+		return shuffled.slice(0, count).map(toAnimeCardFormat);
+	} catch (err) {
+		console.error('Error in getRandomMixedAnimes:', err);
+		return [];
+	}
+}
+
+export async function getRandomMixedMangas(count = 20) {
+	const totalPages = 500;
+	const randomPage = Math.floor(Math.random() * (totalPages - 2)) + 2;
+
+	try {
+		const [popular, random] = await Promise.all([
+			fetchPage('manga', 1),
+			fetchPage('manga', randomPage),
+		]);
+
+		const combined = [...popular, ...random];
+		const filtered = combined.filter(isContentSafe);
+
+		const unique = removeDuplicatesById(filtered);
+		const shuffled = shuffleArray(unique);
+
+		return shuffled.slice(0, count).map(toMangaCardFormat);
+	} catch (err) {
+		console.error('Error in getRandomMixedMangas:', err);
+		return [];
+	}
+}

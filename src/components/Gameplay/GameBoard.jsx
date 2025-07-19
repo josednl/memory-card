@@ -1,7 +1,7 @@
 import '@/styles/GameBoard.css';
 import { useState, useEffect } from 'react';
 import { getRandomPokemonList } from '@/services/pokemonService.js';
-import { getRandomAnimes, getRandomMangas, getRandomMixedCharacters } from '@/services/animeService.js';
+import { getRandomMixedAnimes, getRandomMixedMangas, getRandomMixedCharacters } from '@/services/animeService.js';
 import { shuffleArray } from '@/utils/shuffleArray.js';
 import ModalAlert from '@/components/Generic/ModalAlert.jsx';
 import BackButton from '@/components/Generic/BackButton.jsx';
@@ -42,9 +42,9 @@ export default function GameBoard({ config }) {
 		try {
 			switch (config.theme) {
 				case 'Anime':
-					return await getRandomAnimes(count);
+					return await getRandomMixedAnimes(count);
 				case 'Manga':
-					return await getRandomMangas(count);
+					return await getRandomMixedMangas(count);
 				case 'Anime & Manga Characters':
 					return await getRandomMixedCharacters(count);
 				case 'Pokémon':
@@ -72,22 +72,29 @@ export default function GameBoard({ config }) {
 	};
 
 	const loadNextCardsInfinityMode = async () => {
-		setLoading(true);
 		try {
 			const num = getCardCount();
 			const half = Math.floor(num / 2);
 			const oldHalf = shuffleArray(previousCards).slice(0, half);
-			const newHalf = await loadCardsByTheme(num - half);
-			const combined = shuffleArray([...oldHalf, ...newHalf]);
+			const oldIds = new Set(oldHalf.map((c) => c.id));
+
+			const newCards = [];
+			while (newCards.length < num - half) {
+				const fetched = await loadCardsByTheme(num - half);
+				const unique = fetched.filter(c => c && c.id && !oldIds.has(c.id) && !newCards.find(n => n.id === c.id));
+				newCards.push(...unique);
+			}
+
+			const limitedNewCards = newCards.slice(0, num - half);
+			const combined = shuffleArray([...oldHalf, ...limitedNewCards]);
 
 			setCards(combined);
 			setPreviousCards(combined);
 		} catch (err) {
-			console.error('Error loading next Pokémon:', err);
-		} finally {
-			setLoading(false);
+			console.error('Error loading next set of cards in Infinity mode:', err);
 		}
 	};
+
 
 	useEffect(() => {
 		loadInitialCards();
@@ -137,7 +144,7 @@ export default function GameBoard({ config }) {
 					const updated = new Set(prev);
 					updated.add(id);
 
-					if (updated.size === cards.length && config.mode !== 'Infinity') {
+					if (config.mode !== 'Infinity' && updated.size === cards.length) {
 						setModal({ show: true, title: 'You Win!', message: 'Congratulations, you clicked all the cards!' });
 						setGameOver(true);
 					}
@@ -190,7 +197,7 @@ export default function GameBoard({ config }) {
 					) : (
 						cards.map((card) => (
 							<GameCard
-								key={card.id}
+								key={`${card.id}-${card.name}`}
 								id={card.id}
 								title={card.name}
 								image={card?.sprites?.front_default ?? card?.imageUrl}
