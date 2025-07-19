@@ -3,8 +3,10 @@ import { useState, useEffect } from 'react';
 import { getRandomPokemonList } from '@/services/pokemonService.js';
 import { getRandomAnimes, getRandomMangas, getRandomMixedCharacters } from '@/services/animeService.js';
 import { shuffleArray } from '@/utils/shuffleArray.js';
+import ModalAlert from '@/components/Generic/ModalAlert.jsx';
 import BackButton from '@/components/Generic/BackButton.jsx';
 import HelpButton from '@/components/Generic/HelpButton.jsx';
+import RestartButton from '@/components/Generic/RestartButton.jsx';
 import GameCard from '@/components/Generic/GameCard.jsx';
 
 export default function GameBoard({ config }) {
@@ -15,6 +17,8 @@ export default function GameBoard({ config }) {
 	const [previousCards, setPreviousCards] = useState([]);
 	const [currentScore, setCurrentScore] = useState(0);
 	const [loading, setLoading] = useState(true);
+	const [modal, setModal] = useState({ show: false, title: '', message: '' });
+	const [gameOver, setGameOver] = useState(false);
 	const [bestScore, setBestScore] = useState(() => {
 		const savedBest = localStorage.getItem('bestScore');
 		return savedBest ? parseInt(savedBest, 10) : 0;
@@ -90,11 +94,25 @@ export default function GameBoard({ config }) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const restartGame = async () => {
+		setCurrentScore(0);
+		setClickedIds(new Set());
+		setGameOver(false);
+		await loadInitialCards();
+	};
+
+	const handleModalClose = () => {
+		setModal({ show: false, title: '', message: '' });
+		if (currentScore === 0) {
+			loadInitialCards();
+		}
+	};
+
 	const handleCardClick = async (id) => {
 		if (isAnimating) return;
 
 		if (clickedIds.has(id)) {
-			alert('You lost');
+			setModal({ show: true, title: 'Game Over', message: 'You clicked the same card!' });
 			setTimeout(() => {
 				setCards((prev) => shuffleArray(prev));
 			}, 500);
@@ -119,11 +137,9 @@ export default function GameBoard({ config }) {
 					const updated = new Set(prev);
 					updated.add(id);
 
-					if (
-						updated.size === cards.length &&
-						config.mode !== 'Infinity'
-					) {
-						alert('You Win');
+					if (updated.size === cards.length && config.mode !== 'Infinity') {
+						setModal({ show: true, title: 'You Win!', message: 'Congratulations, you clicked all the cards!' });
+						setGameOver(true);
 					}
 
 					return updated;
@@ -148,6 +164,7 @@ export default function GameBoard({ config }) {
 					<div className='game-left'>
 						<BackButton />
 						<HelpButton />
+						<RestartButton onRestart={restartGame} />
 					</div>
 					<div className='game-mid'>
 						<div className='current-score'>
@@ -179,11 +196,17 @@ export default function GameBoard({ config }) {
 								image={card?.sprites?.front_default ?? card?.imageUrl}
 								flipped={flipped}
 								onClick={() => handleCardClick(card.id)}
-								disabled={isAnimating}
+								disabled={isAnimating || gameOver}
 							/>
 						))
 					)}
-					
+					{modal.show && (
+						<ModalAlert
+							title={modal.title}
+							message={modal.message}
+							onClose={handleModalClose}
+						/>
+					)}
 				</div>
 			</div>
 		</>

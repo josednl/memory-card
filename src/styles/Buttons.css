@@ -26,7 +26,8 @@
 }
 
 .game-back-button,
-.game-help-button {
+.game-help-button,
+.game-restart-button {
     font-size: 10px;
     display: flex;
     justify-content: center;
@@ -34,12 +35,9 @@
     gap: 5px;
 }
 
-.game-back-button img {
-    width: 20px;
-    height: 20px;
-}
-
-.game-help-button img {
+.game-back-button img,
+.game-help-button img,
+.game-restart-button img {
     width: 20px;
     height: 20px;
 }
