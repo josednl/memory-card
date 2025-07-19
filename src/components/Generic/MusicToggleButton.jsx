@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { MusicContext } from '@/components/context/MusicContext.jsx';
 import MusicOnIcon from '@/assets/music_note.svg';
 import MusicOffIcon from '@/assets/music_off.svg';
-import '@/styles/MusicToggleButton.css';
+import '@/styles/Buttons.css';
 
 export default function MusicToggleButton() {
     const { isPlaying, toggleMusic } = useContext(MusicContext);
